@@ -37,6 +37,7 @@ const parseRDFaDOM = require('./rdfaparser').parseRDFaDOM
 const RDFParser = require('./rdfxmlparser')
 const Uri = require('./uri')
 const Util = require('./util')
+const serialize = require('./serialize')
 
 var Parsable = {
   'text/n3': true,
@@ -585,8 +586,13 @@ var Fetcher = function Fetcher (store, timeout, async) {
   //  Writes back to the web what we have in the store for this uri
   this.putBack = function (uri, options) {
     uri = uri.uri || uri // Accept object or string
+<<<<<<< fix_webpack_problem
     var doc = $rdf.sym(uri).doc() // strip off #
     options.data = $rdf.serialize(doc, this.store, doc.uri, options.contentType || 'text/turtle')
+=======
+    var doc = new NamedNode(uri).doc() // strip off #
+    options.data = serialize(doc, this.store, doc.uri, options.contentType ||  'text/turtle')
+>>>>>>> cfd1259 Removed dependency to global $rdf
     return this.webOperation('PUT', uri, options)
   }
 
@@ -862,8 +868,13 @@ var Fetcher = function Fetcher (store, timeout, async) {
         var value = xhr.headers[h].trim()
         var h2 = h.toLowerCase()
         kb.add(response, ns.httph(h2), value, response)
+<<<<<<< fix_webpack_problem
         if (h2 === 'content-type') { // Convert to RDF type
           kb.add(xhr.resource, ns.rdf('type'), $rdf.Util.mediaTypeClass(value), response)
+=======
+        if (h2 === 'content-type'){ // Convert to RDF type
+          kb.add(xhr.resource, ns.rdf('type'), Util.mediaTypeClass(value), response)
+>>>>>>> cfd1259 Removed dependency to global $rdf
         }
       }
     }
